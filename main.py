@@ -6,15 +6,20 @@ SCREEN_WIDTH, SCREEN_HEIGHT = pyautogui.size()
 X_MULT = SCREEN_WIDTH / 630
 Y_MULT = SCREEN_HEIGHT / 475
 
-def main():
+def run():
+
     cap = cv2.VideoCapture(1)
-    
-    if not cap.isOpened():
-        raise IOError("Cannot open webcam")
+    _, frame = cap.read()
+    frame = cv2.flip(frame, 1)
+
+    fromCenter = False
+    r = cv2.selectROI(frame, fromCenter)
 
     while True:
         _, frame = cap.read()
         frame = cv2.flip(frame, 1)
+        frame = frame[int(r[1]):int(r[1]+r[3]), int(r[0]):int(r[0]+r[2])]
+
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
         lower_red = np.array([0, 120, 70])
@@ -53,4 +58,5 @@ def main():
     cap.release()
     cv2.destroyAllWindows()
 
-main()
+if __name__ == '__main__':
+    run()
