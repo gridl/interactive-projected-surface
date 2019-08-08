@@ -7,8 +7,8 @@ def run():
     cap = cv2.VideoCapture(1)
     _, frame = cap.read()
 
-    fromCenter = False
-    r = cv2.selectROI(frame, fromCenter)
+    from_center = False
+    r = cv2.selectROI(frame, from_center)
 
     screen_width = r[2]
     screen_height = r[3]
@@ -48,7 +48,7 @@ def run():
 
             cv2.circle(frame, (center_x, center_y), 5, (255, 255, 255), -1)
 
-        cv2.namedWindow('Frame',cv2.WINDOW_NORMAL)
+        cv2.namedWindow('Frame', cv2.WINDOW_NORMAL)
         cv2.imshow("Frame", frame)
         cv2.imshow("Mask", mask)
 
