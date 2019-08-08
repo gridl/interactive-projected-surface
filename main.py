@@ -2,22 +2,23 @@ import cv2
 import numpy as np
 import pyautogui
 
-SCREEN_WIDTH, SCREEN_HEIGHT = pyautogui.size()
-X_MULT = SCREEN_WIDTH / 630
-Y_MULT = SCREEN_HEIGHT / 475
-
 def run():
 
     cap = cv2.VideoCapture(1)
     _, frame = cap.read()
-    frame = cv2.flip(frame, 1)
 
     fromCenter = False
     r = cv2.selectROI(frame, fromCenter)
 
+    screen_width = r[2]
+    screen_height = r[3]
+
+    x_mult = 3200 / screen_width
+    y_mult = 1800 / screen_height
+
     while True:
         _, frame = cap.read()
-        frame = cv2.flip(frame, 1)
+        frame = cv2.flip(frame, -1)
         frame = frame[int(r[1]):int(r[1]+r[3]), int(r[0]):int(r[0]+r[2])]
 
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -40,8 +41,8 @@ def run():
             cv2.drawContours(frame, [cnt], 0, (0, 0, 0), 5)             
             
             M = cv2.moments(cnt)
-            center_x = int((M['m10']/M['m00']) * X_MULT)
-            center_y = int((M['m01']/M['m00']) * Y_MULT)
+            center_x = int((M['m10']/M['m00']) * x_mult)
+            center_y = int((M['m01']/M['m00']) * y_mult)
 
             pyautogui.moveTo(center_x, center_y)
 
